@@ -17,32 +17,32 @@ setInterval(() => neverEndingObservable.next(10), 500);
 const source = delayValues.pipe(
   concatMap(x => {
     return neverEndingObservable.pipe(
-      map((y: number) => y * x.key),
+      map((y: number) => `${y * x.key} : from concatMap`),
       take(3)
     );
   })
 );
 
-//source.subscribe(console.log);
+source.subscribe(console.log);
 
 const mergeMapSource = delayValues.pipe(
   mergeMap(x => {
     return neverEndingObservable.pipe(
-      map((y: number) => y * x.key),
+      map((y: number) => `${y * x.key} : from mergeMap`),
       take(3)
     );
   })
 );
 
-//mergeMapSource.subscribe(console.log);
+// mergeMapSource.subscribe(console.log);
 
 const mergeMapSourceAsConcatMap = delayValues.pipe(
   mergeMap(x => {
     return neverEndingObservable.pipe(
-      map((y: number) => y * x.key),
+      map((y: number) => `${y * x.key} : from mergeMap with one concurrency `),
       take(3)
     );
   }, 1)
 );
 
-mergeMapSourceAsConcatMap.subscribe(console.log);
+// mergeMapSourceAsConcatMap.subscribe(console.log);
