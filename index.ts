@@ -1,26 +1,17 @@
-import { from, of, Subject } from "rxjs";
-import { concatMap, delay, bufferCount } from "rxjs/operators";
+import { of, from } from 'rxjs'; 
+import { map } from 'rxjs/operators';
 
-const LIMIT = 1000;
-const BATCH_SIZE = 10;
-let index = 0;
-const incomingSubject = new Subject();
+const delayValues = from([
+  { key: 1, source: "delay" },
+  { key: 2, source: "delay" },
+  { key: 3, source: "delay" },
+  { key: 4, source: "delay" },
+  { key: 5, source: "delay" },
+  { key: 6, source: "delay" }
+]);
 
-const source = incomingSubject.pipe(
-  bufferCount(BATCH_SIZE),
-  concatMap(win =>
-    from(win).pipe(
-      delay(3000),
-      concatMap(x => {
-        return of(x).pipe(delay(10));
-      })
-    )
-  )
+const source = of('World').pipe(
+  map(x => `Hello ${x}!`)
 );
 
 source.subscribe(console.log);
-
-while (index < LIMIT) {
-  index++;
-  incomingSubject.next({ key: index });
-}
