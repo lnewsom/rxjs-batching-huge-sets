@@ -23,7 +23,7 @@ const source = delayValues.pipe(
   })
 );
 
-source.subscribe(console.log);
+// source.subscribe(console.log);
 
 const mergeMapSource = delayValues.pipe(
   mergeMap(x => {
@@ -34,7 +34,7 @@ const mergeMapSource = delayValues.pipe(
   })
 );
 
-// mergeMapSource.subscribe(console.log);
+//mergeMapSource.subscribe(console.log);
 
 const mergeMapSourceAsConcatMap = delayValues.pipe(
   mergeMap(x => {
@@ -46,3 +46,14 @@ const mergeMapSourceAsConcatMap = delayValues.pipe(
 );
 
 // mergeMapSourceAsConcatMap.subscribe(console.log);
+
+const reversedOrder = neverEndingObservable.pipe(
+  take(3),
+  concatMap((x: number) => {
+    return delayValues.pipe(
+      map((y) => `${x * y.key} : from reversedOrder`)
+    );
+  })
+);
+
+// reversedOrder.subscribe(console.log);
